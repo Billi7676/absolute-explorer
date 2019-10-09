@@ -13,7 +13,7 @@ mkdir ~/.absolutecore
 # Setup configuration for node.
 rpcuser=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 rpcpassword=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
-cat >~/.absolute/absolute.conf <<EOL
+cat >~/.absolutecore/absolute.conf <<EOL
 rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 daemon=1

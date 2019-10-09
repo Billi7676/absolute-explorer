@@ -12,8 +12,8 @@ const config = {
   db: {
     host: '127.0.0.1',
     port: '27017',
-    name: 'blockex',
-    user: 'blockexuser',
+    name: 'absolutex',
+    user: 'absolutexuser',
     pass: 'Explorer!1'
   },
   rpc: {

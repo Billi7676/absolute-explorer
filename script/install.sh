@@ -25,7 +25,7 @@ server {
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
-    #server_name explorer.bulwarkcrypto.com;
+    #server_name explorer.absolutecoin.net;
     server_name _;
 
     gzip on;
@@ -51,21 +51,21 @@ server {
 
     #listen [::]:443 ssl ipv6only=on; # managed by Certbot
     #listen 443 ssl; # managed by Certbot
-    #ssl_certificate /etc/letsencrypt/live/explorer.bulwarkcrypto.com/fullchain.pem; # managed by Certbot
-    #ssl_certificate_key /etc/letsencrypt/live/explorer.bulwarkcrypto.com/privkey.pem; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/explorer.absolutecoin.net/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/explorer.absolutecoin.net/privkey.pem; # managed by Certbot
     #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 #server {
-#    if ($host = explorer.bulwarkcrypto.com) {
+#    if ($host = explorer.absolutecoin.net) {
 #        return 301 https://\$host\$request_uri;
 #    } # managed by Certbot
 #
 #	listen 80 default_server;
 #	listen [::]:80 default_server;
 #
-#	server_name explorer.bulwarkcrypto.com;
+#	server_name explorer.absolutecoin.net;
 #   return 404; # managed by Certbot
 #}
 EOL
@@ -83,16 +83,16 @@ installMongo () {
     sudo chown -R mongodb:mongodb /data/db
     sudo systemctl start mongod
     sudo systemctl enable mongod
-    mongo blockex --eval "db.createUser( { user: \"$rpcuser\", pwd: \"$rpcpassword\", roles: [ \"readWrite\" ] } )"
+    mongo absolutex --eval "db.createUser( { user: \"$rpcuser\", pwd: \"$rpcpassword\", roles: [ \"readWrite\" ] } )"
     clear
 }
 
 installBulwark () {
     echo "Installing Bulwark..."
-    mkdir -p /tmp/bulwark
-    cd /tmp/bulwark
-    curl -Lo bulwark.tar.gz $bwklink
-    tar -xzf bulwark.tar.gz
+    mkdir -p /tmp/absolute
+    cd /tmp/absolute
+    curl -Lo absolute.tar.gz $abslink
+    tar -xzf absolute.tar.gz
     sudo mv ./bin/* /usr/local/bin
     cd
     rm -rf /tmp/bulwark
@@ -127,25 +127,25 @@ EOL
 
 installBlockEx () {
     echo "Installing BlockEx..."
-    git clone https://github.com/bulwark-crypto/bulwark-explorer.git /home/explorer/blockex
-    cd /home/explorer/blockex
+    git clone https://github.com/bulwark-crypto/bulwark-explorer.git /home/explorer/absolutex
+    cd /home/explorer/absolutex
     yarn install
-    cat > /home/explorer/blockex/config.js << EOL
+    cat > /home/explorer/absolutex/config.js << EOL
 const config = {
   'api': {
-    'host': 'https://explorer.bulwarkcrypto.com',
+    'host': 'https://explorer.absolutecoin.net',
     'port': '3000',
     'prefix': '/api',
     'timeout': '180s'
   },
   'coinMarketCap': {
     'api': 'http://api.coinmarketcap.com/v1/ticker/',
-    'ticker': 'bulwark'
+    'ticker': 'absolute'
   },
   'db': {
     'host': '127.0.0.1',
     'port': '27017',
-    'name': 'blockex',
+    'name': 'absolutex',
     'user': '$rpcuser',
     'pass': '$rpcpassword'
   },
@@ -170,11 +170,11 @@ EOL
     nodejs ./cron/rich.js
     clear
     cat > mycron << EOL
-*/1 * * * * cd /home/explorer/blockex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/peer.js >> ./tmp/peer.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
-*/5 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/peer.js >> ./tmp/peer.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
+*/5 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
 EOL
     crontab mycron
     rm -f mycron
@@ -190,18 +190,18 @@ clear
 
 # Variables
 echo "Setting up variables..."
-bwklink=`curl -s https://api.github.com/repos/bulwark-crypto/bulwark/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
+abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
 rpcuser=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 rpcpassword=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
-echo "Repo: $bwklink"
+echo "Repo: $abslink"
 echo "PWD: $PWD"
 echo "User: $rpcuser"
 echo "Pass: $rpcpassword"
 sleep 5s
 clear
 
-# Check for blockex folder, if found then update, else install.
-if [ ! -d "/home/explorer/blockex" ]
+# Check for absolutex folder, if found then update, else install.
+if [ ! -d "/home/explorer/absolutex" ]
 then
     installNginx
     installMongo
@@ -210,7 +210,7 @@ then
     installBlockEx
     echo "Finished installation!"
 else
-    cd /home/explorer/blockex
+    cd /home/explorer/absolutex
     git pull
     pm2 restart index
     echo "BlockEx updated!"

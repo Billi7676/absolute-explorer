@@ -1,4 +1,4 @@
-![Bulwark Logo](https://bulwarkcrypto.com/wp-content/uploads/2018/04/blockexplorer.svg)
+![Bulwark Logo](https://bulwarkcrypto.com/wp-content/uploads/2018/04/absolutexplorer.svg)
 
 Bulwark Explorer
 &middot;
@@ -29,7 +29,7 @@ This will install the latest Bulwark wallet and create a rpc username/password b
 ## Install
 `git clone https://github.com/bulwark-crypto/bulwark-explorer.git` - copy repo to local folder.
 
-`cd blockex` - change into project directory.
+`cd absolutex` - change into project directory.
 
 `yarn install` - install packages used by the system.
 
@@ -40,9 +40,9 @@ This will install the latest Bulwark wallet and create a rpc username/password b
 #### Database Configuration
 `mongo` - connect using mongo client.
 
-`use blockex` - switch to database.
+`use absolutex` - switch to database.
 
-`db.createUser( { user: "blockexuser", pwd: "Explorer!1", roles: [ "readWrite" ] } )` - create a user with the values stored in the `config.js` file from above, meaning they should match.
+`db.createUser( { user: "absolutexuser", pwd: "Explorer!1", roles: [ "readWrite" ] } )` - create a user with the values stored in the `config.js` file from above, meaning they should match.
 
 `exit` - exit the mongo client.
 
@@ -54,7 +54,7 @@ On the local development machine, not the server/VPS, run `cp config.template.js
 __IMPORTANT:__ _You should have two `config.js` files, one for the server with the sensitive database connection information, and one that is used by the developer/designer on their local machine to configure and build the UI._
 
 #### Crontab
-The following automated tasks are currently needed for BlockEx to update but before running the tasks please update the cron script `/path/to/blockex/script/cron_block.sh` for the block with the local `/path/to/node`.
+The following automated tasks are currently needed for BlockEx to update but before running the tasks please update the cron script `/path/to/absolutex/script/cron_block.sh` for the block with the local `/path/to/node`.
 
 `yarn run cron:coin` - will fetch coin related information like price and supply from coinmarketcap.com.
 
@@ -70,11 +70,11 @@ __Note:__ is is recommended to run all the crons before editing the crontab to h
 
 To setup the crontab please see run `crontab -e` to edit the crontab and paste the following lines (edit with your local information):
 ```
-*/1 * * * * cd /path/to/blockex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
-*/1 * * * * cd /path/to/blockex && /path/to/node ./cron/masternode.js >> ./tmp/masternode.log 2>&1
-*/1 * * * * cd /path/to/blockex && /path/to/node ./cron/peer.js >> ./tmp/peer.log 2>&1
-*/1 * * * * cd /path/to/blockex && /path/to/node ./cron/rich.js >> ./tmp/rich.log 2>&1
-*/5 * * * * cd /path/to/blockex && /path/to/node ./cron/coin.js >> ./tmp/coin.log 2>&1
+*/1 * * * * cd /path/to/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
+*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/masternode.js >> ./tmp/masternode.log 2>&1
+*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/peer.js >> ./tmp/peer.log 2>&1
+*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/rich.js >> ./tmp/rich.log 2>&1
+*/5 * * * * cd /path/to/absolutex && /path/to/node ./cron/coin.js >> ./tmp/coin.log 2>&1
 ```
 
 ## Build

@@ -1,5 +1,5 @@
 
-const blockex = require('./blockex');
+const absolutex = require('./absolutex');
 const { rpc } = require('../../lib/cron');
 // Models
 const Block = require('../../model/block');
@@ -119,7 +119,7 @@ const getdistribution = async (req, res) => {
   }
 };
 
-const getaddress = blockex.getAddress;
+const getaddress = absolutex.getAddress;
 
 const getbalance = async (req, res) => {
   try {
@@ -133,7 +133,7 @@ const getbalance = async (req, res) => {
   }
 };
 
-const getlasttxs = blockex.getTXLatest;
+const getlasttxs = absolutex.getTXLatest;
 
 module.exports =  {
   // /api

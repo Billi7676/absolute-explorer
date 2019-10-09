@@ -95,31 +95,31 @@ installBulwark () {
     tar -xzf absolute.tar.gz
     sudo mv ./bin/* /usr/local/bin
     cd
-    rm -rf /tmp/bulwark
-    mkdir -p /home/explorer/.bulwark
-    cat > /home/explorer/.bulwark/bulwark.conf << EOL
+    rm -rf /tmp/absolute
+    mkdir -p /home/explorer/.absolutecore
+    cat > /home/explorer/.absolutecore/absolute.conf << EOL
 rpcport=52544
 rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 daemon=1
 txindex=1
 EOL
-    sudo cat > /etc/systemd/system/bulwarkd.service << EOL
+    sudo cat > /etc/systemd/system/absoluted.service << EOL
 [Unit]
-Description=bulwarkd
+Description=absoluted
 After=network.target
 [Service]
 Type=forking
 User=explorer
 WorkingDirectory=/home/explorer
-ExecStart=/home/explorer/bin/bulwarkd -datadir=/home/explorer/.bulwark
-ExecStop=/home/explorer/bin/bulwark-cli -datadir=/home/explorer/.bulwark stop
+ExecStart=/home/explorer/bin/absoluted -datadir=/home/explorer/.absolutecore
+ExecStop=/home/explorer/bin/absolute-cli -datadir=/home/explorer/.absolutecore stop
 Restart=on-abort
 [Install]
 WantedBy=multi-user.target
 EOL
-    sudo systemctl start bulwarkd
-    sudo systemctl enable bulwarkd
+    sudo systemctl start absoluted
+    sudo systemctl enable absoluted
     echo "Sleeping for 1 hour while node syncs blockchain..."
     sleep 1h
     clear
@@ -127,7 +127,7 @@ EOL
 
 installBlockEx () {
     echo "Installing BlockEx..."
-    git clone https://github.com/bulwark-crypto/bulwark-explorer.git /home/explorer/absolutex
+    git clone https://github.com/absolute-community/bulwark-explorer.git /home/explorer/absolutex
     cd /home/explorer/absolutex
     yarn install
     cat > /home/explorer/absolutex/config.js << EOL
@@ -207,12 +207,12 @@ then
     installMongo
     installBulwark
     installNodeAndYarn
-    installBlockEx
+    installAbsolutex
     echo "Finished installation!"
 else
     cd /home/explorer/absolutex
     git pull
     pm2 restart index
-    echo "BlockEx updated!"
+    echo "Absolutex updated!"
 fi
 

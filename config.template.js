@@ -3,9 +3,9 @@
  */
 const config = {
   api: {
-    host: 'https://explorer.bulwarkcrypto.com',
+    host: 'https://explorer.absolutecoin.net',
     port: '3000',
-    portWorker: '443',
+    portWorker: '8080',
     prefix: '/api',
     timeout: '5s'
   },
@@ -19,16 +19,16 @@ const config = {
   rpc: {
     host: '127.0.0.1',
     port: '52541',
-    user: 'bulwarkrpc',
+    user: 'absolutepc',
     pass: 'someverysafepassword',
     timeout: 8000, // 8 seconds
   },
   coinDetails: {
-    name: 'Bulwark',
-    shortName: 'BWK',
-    longName: 'Bulwark Cryptocurrency',
+    name: 'Absolute',
+    shortName: 'ABS',
+    longName: 'Absolute Cryptocurrency',
     coinNumberFormat: '0,0.0000',
-    websiteUrl: 'https://bulwarkcrypto.com/'
+    websiteUrl: 'https://absolutecoin.net/'
   },
 
   ///////////////////////////////
@@ -39,7 +39,7 @@ const config = {
   },
   coinMarketCap: {
     api: 'http://api.coinmarketcap.com/v1/ticker/',
-    ticker: 'bulwark'
+    ticker: 'absolute'
   },
   slack: {
     url: 'https://hooks.slack.com/services/A00000000/B00000000/somekindofhashhere',

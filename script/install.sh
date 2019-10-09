@@ -125,8 +125,8 @@ EOL
     clear
 }
 
-installBlockEx () {
-    echo "Installing BlockEx..."
+installAbsolutex () {
+    echo "Installing Absolutex..."
     git clone https://github.com/absolute-community/bulwark-explorer.git /home/explorer/absolutex
     cd /home/explorer/absolutex
     yarn install
@@ -190,7 +190,7 @@ clear
 
 # Variables
 echo "Setting up variables..."
-abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
+abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep x86_64-linux | cut -d '"' -f 4`
 rpcuser=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 rpcpassword=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 echo "Repo: $abslink"

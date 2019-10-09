@@ -1,4 +1,4 @@
-![Bulwark Logo](https://bulwarkcrypto.com/wp-content/uploads/2018/04/absolutexplorer.svg)
+![Absolute Logo](http://www.absolutecoin.net/images/logo_aiw-Level-(Blue-Black).png)
 
 Bulwark Explorer
 &middot;
@@ -22,12 +22,12 @@ It is also required to have the Bulwark daemon running in the background. It is 
 
 Our geniuses here at BulwarkCorp™ have put together a script to do this for you. Just run
 
-`bash script/bulwarkd_setup.sh`
+`bash script/absoluted_setup.sh`
 
 This will install the latest Bulwark wallet and create a rpc username/password before starting the daemon.
 
 ## Install
-`git clone https://github.com/bulwark-crypto/bulwark-explorer.git` - copy repo to local folder.
+`git clone https://github.com/absolute-community/bulwark-explorer.git` - copy repo to local folder.
 
 `cd absolutex` - change into project directory.
 
@@ -104,7 +104,3 @@ At this time only the client web interface needs to be built using webpack and t
 #### Server - Rest API (node, express, mongo, mongoose)
 
 `server/route/api.js` - Contains all public rest api endpoint routes
-
-## To-Do
-- Write more tests
-- Cluster support for api

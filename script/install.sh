@@ -98,7 +98,7 @@ installBulwark () {
     rm -rf /tmp/absolute
     mkdir -p /home/explorer/.absolutecore
     cat > /home/explorer/.absolutecore/absolute.conf << EOL
-rpcport=52544
+rpcport=18889
 rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 daemon=1

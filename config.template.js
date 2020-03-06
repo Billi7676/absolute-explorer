@@ -3,7 +3,7 @@
  */
 const config = {
   api: {
-    host: 'https://explorer.absolutecoin.net',
+    host: 'https://info.absolutecoin.net',
     port: '3000',
     portWorker: '8080',
     prefix: '/api',
@@ -26,7 +26,7 @@ const config = {
   coinDetails: {
     name: 'Absolute',
     shortName: 'ABS',
-    longName: 'Absolute Cryptocurrency',
+    longName: 'Absolute - Proof of View',
     coinNumberFormat: '0,0.0000',
     websiteUrl: 'https://absolutecoin.net/'
   },

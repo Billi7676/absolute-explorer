@@ -2,7 +2,7 @@
 # Download latest node and install.
 abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep x86_64-linux | cut -d '"' -f 4`
 version=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep tag_name | grep v | cut -d '"' -f 4`
-versionsh=${version:1:7}
+versionsh=${version:12:2:5}
 sudo apt-get update -y -qq
 sudo apt-get upgrade -y -qq
 sudo apt-get install software-properties-common -y -qq

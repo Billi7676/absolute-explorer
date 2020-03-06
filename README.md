@@ -2,7 +2,7 @@
 
 Absolute Explorer
 &middot;
-[![GitHub license](https://img.shields.io/github/license/bulwark-crypto/bulwark-explorer.svg)](https://github.com/bulwark-crypto/bulwark-explorer/blob/master/COPYING) [![Build Status](https://travis-ci.org/bulwark-crypto/bulwark-explorer.svg?branch=master)](https://travis-ci.org/bulwark-crypto/bulwark-explorer) [![Discord](https://img.shields.io/discord/374271866308919296.svg)](https://discord.me/bulwarkcrypto) [![GitHub version](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer.svg)](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer)
+[![GitHub license](https://img.shields.io/github/license/bulwark-crypto/bulwark-explorer.svg)](https://github.com/bulwark-crypto/bulwark-explorer/blob/master/COPYING) [![Build Status](https://travis-ci.org/bulwark-crypto/bulwark-explorer.svg?branch=master)](https://travis-ci.org/absolute-community/bulwark-explorer) [![Discord](https://img.shields.io/discord/374271866308919296.svg)](https://discord.me/FhtgzY8) [![GitHub version](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer.svg)](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer)
 =====
 
 The most advanced blockchain eplorer for masternode, proof-of-stake and proof-of-work chains.
@@ -27,9 +27,9 @@ Features:
 
 ## Post-Installation
 
-Check block syncing status with `tail -f /home/explorer/blockex/tmp/block.log` 
+Check block syncing status with `tail -f /home/explorer/blockex/tmp/block.log`
 
-You will most likely see `Error: connect ECONNREFUSED` this is because your RPC username/password/port do not match your coin. Please check your coin `.config` file (ex: `/home/explorer/.absolutecore/absolute.conf`) 
+You will most likely see `Error: connect ECONNREFUSED` this is because your RPC username/password/port do not match your coin. Please check your coin `.config` file (ex: `/home/explorer/.absolutecore/absolute.conf`)
 
 You will see something like this:
 ```
@@ -44,7 +44,7 @@ Please ensure your `/home/explorer/absoluteex/config.js` matches the rpc informa
 # Advanced Installation Instructions
 
 ## Required
-This repo assumes `git`, `mongodb`, `node`, `yarn`, and are installed with configuration done.  Please adjust commands to your local environment. 
+This repo assumes `git`, `mongodb`, `node`, `yarn`, and are installed with configuration done.  Please adjust commands to your local environment.
 
 Download links:
 
@@ -88,7 +88,7 @@ On the local development machine, not the server/VPS, run `cp config.template.js
 __IMPORTANT:__ _You should have two `config.js` files, one for the server with the sensitive database connection information, and one that is used by the developer/designer on their local machine to configure and build the UI._
 
 #### Crontab
-The following automated tasks are currently needed for BlockEx to update but before running the tasks please update the cron script `/path/to/blockex/script/cron_block.sh` for the block with the local `/path/to/node`.
+The following automated tasks are currently needed for BlockEx to update but before running the tasks please update the cron script `/path/to/absolutex/script/cron_block.sh` for the block with the local `/path/to/node`.
 
 `yarn run cron:coin` - will fetch coin related information like price and supply from coinmarketcap.com.
 

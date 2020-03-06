@@ -158,17 +158,17 @@ const { SocialType } = require('./features/social/data');
 
 /**
  * Global configuration object.
- * 
+ *
  * Running:
  * yarn run start:api
  * yarn run start:web (Access project via http://localhost:8081/) (port comes from webpack.config.js)
- * 
+ *
  * For nginx server installation and production read /script/install.sh `installNginx ()`. Note that we use Certbot to grant SSL certificate.
- * 
+ *
  */
 const config = {
   api: {
-    host: 'http://localhost', // ex: 'https://info.absolutecoin.net' for nginx (SSL), 'http://IP_ADDRESS' 
+    host: 'http://localhost', // ex: 'https://info.absolutecoin.net' for nginx (SSL), 'http://IP_ADDRESS'
     port: '3000', // ex: Port 3000 on prod and localhost
     portWorker: '3000', // ex: Port 443 for production(ngingx) if you have SSL (we use certbot), 3000 on localhost or ip
     prefix: '/api',
@@ -217,9 +217,9 @@ const config = {
       }
     }
   ],
-  
+
   freegeoip: {
-    api: 'https://extreme-ip-lookup.com/json/' //@todo need to find new geoip service as the limits are too small now (hitting limits) 
+    api: 'https://extreme-ip-lookup.com/json/' //@todo need to find new geoip service as the limits are too small now (hitting limits)
   },
   coinMarketCap: {
     api: 'http://api.coinmarketcap.com/v1/ticker/',
@@ -407,7 +407,20 @@ EOL
 
 # Setup
 echo "Updating system..."
-sudo apt-get update -y
+sudo apt-get update -y -qq
+sudo apt-get upgrade -y -qq
+sudo apt-get install software-properties-common -y -qq
+sudo add-apt-repository ppa:bitcoin/bitcoin -y
+sudo apt-get update -y -qq
+sudo apt-get install nano htop -y -qq
+sudo apt-get install pwgen  -y -qq
+sudo apt-get install libdb4.8-dev libdb4.8++-dev -y -qq
+sudo apt-get install tmux  -y -qq
+sudo apt-get install libevent-pthreads-2.0-5 -y -qq
+sudo apt-get install libboost-all-dev -y -qq
+sudo apt-get install libzmq3-dev -y -qq
+sudo apt-get install libminiupnpc-dev -y -qq
+sudo apt install virtualenv -y -qq
 sudo apt-get install -y apt-transport-https build-essential cron curl gcc git g++ make sudo vim wget
 clear
 

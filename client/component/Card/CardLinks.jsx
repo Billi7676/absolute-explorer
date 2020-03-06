@@ -5,7 +5,7 @@ import Card from './Card';
 
 const CardLinks = () => (
   <Card title="Links">
-    <a href="https://explorer.absolutecoin.net/" target="_blank" rel="nofollow noopener">Website</a><br />
+    <a href="https://info.absolutecoin.net/" target="_blank" rel="nofollow noopener">Website</a><br />
     <a href="https://bitcointalk.org/index.php?topic=4418859.0;topicseen" target="_blank" rel="nofollow noopener">Bitcointalk</a><br />
     <a href="https://github.com/absolute-community/absolute/" target="_blank" rel="nofollow noopener">Github</a><br />
     <a href="https://www.reddit.com/r/absolutecoin" target="_blank" rel="nofollow noopener">Reddit</a><br />

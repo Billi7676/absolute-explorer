@@ -127,13 +127,13 @@ EOL
 
 installAbsolutex () {
     echo "Installing Absolutex..."
-    git clone https://github.com/absolute-community/bulwark-explorer.git /home/explorer/absolutex
+    git clone https://github.com/absolute-community/explorer-explorer.git /home/explorer/absolutex
     cd /home/explorer/absolutex
     yarn install
     cat > /home/explorer/absolutex/config.js << EOL
 const config = {
   'api': {
-    'host': 'https://explorer.absolutecoin.net',
+    'host': 'https://info.absolutecoin.net',
     'port': '3000',
     'prefix': '/api',
     'timeout': '180s'

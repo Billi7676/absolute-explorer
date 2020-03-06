@@ -1,17 +1,23 @@
 
+import configUtils from '../../lib/configUtils';
+
 import Actions from '../core/Actions';
 import Component from '../core/Component';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React from 'react';
+import numeral from 'numeral';
+
 
 import CardAddress from '../component/Card/CardAddress';
-import CardAddressTXs from '../component/Card/CardAddressTXs';
 import HorizontalRule from '../component/HorizontalRule';
 import Pagination from '../component/Pagination';
 import Select from '../component/Select';
-
+import MasternodesList from '../component/MasternodesList';
+import config from './../../config'
 import { PAGINATION_PAGE_SIZE } from '../constants';
+import AddressTxs from './AddressTxs'
+import ProofOfOwnershipButton from '../component/ProofOfOwnership/ProofOfOwnershipButton'
 
 class Address extends Component {
   static propTypes = {
@@ -22,16 +28,18 @@ class Address extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: true,
+
       address: '',
       balance: 0.0,
       received: 0.0,
       error: null,
-      loading: true,
       pages: 0,
       page: 1,
       size: 10,
       txs: [],
-      utxo: []
+      isMasternode: false,
+      carverAddress: null
     };
   };
 
@@ -41,7 +49,7 @@ class Address extends Component {
 
   componentDidUpdate() {
     if (!!this.state.address
-      && this.state.address !== this.props.match.params.hash) {
+      && this.state.address !== this.props.match.params.hash && !this.state.loading) {
       this.getAddress();
     }
   };
@@ -51,15 +59,15 @@ class Address extends Component {
       const address = this.props.match.params.hash;
       this.props
         .getAddress({ address })
-        .then(({ balance, received, txs, utxo }) => {
+        .then((carverAddress) => {
           this.setState({
-            address,
-            balance,
-            received,
-            txs,
-            utxo,
+            ...this.state,
+            address: carverAddress.label,
             loading: false,
-            pages: Math.ceil(txs.length / this.state.size)
+            carverAddress,
+            pages: (carverAddress.countIn + carverAddress.countOut) / this.state.size,
+            balance: carverAddress.balance,
+            received: carverAddress.valueIn - (carverAddress.posValueIn || 0),
           });
         })
         .catch(error => this.setState({ error, loading: false }));
@@ -72,52 +80,72 @@ class Address extends Component {
     this.setState({ pages: Math.ceil(this.state.txs.length / this.state.size) });
   });
 
+  getMasternodeDetails = () => {
+    if (!this.state.isMasternode) {
+      return null;
+    }
+    return (
+      <MasternodesList title="Masternode For Address" isPaginationEnabled={false} getMNs={this.props.getMNs} hideCols={["addr"]} />
+    );
+  }
+  getMasternodesAddressWidget = () => {
+    const address = this.props.match.params.hash;
+
+    const masternodesAddressWidget = configUtils.getCommunityAddressWidgetConfig(address, "masternodesAddressWidget");
+    if (!masternodesAddressWidget) {
+      return null;
+    }
+
+    return (
+      <MasternodesList title={masternodesAddressWidget.title} isPaginationEnabled={masternodesAddressWidget.isPaginationEnabled} getMNs={this.props.getMasternodesAddressWidget} tag={masternodesAddressWidget.tag} />
+    );
+  }
+
+
   render() {
     if (!!this.state.error) {
       return this.renderError(this.state.error);
     } else if (this.state.loading) {
       return this.renderLoading();
     }
-    const selectOptions = PAGINATION_PAGE_SIZE;
 
-    const select = (
-      <Select
-        onChange={ value => this.handleSize(value) }
-        selectedValue={ this.state.size }
-        options={ selectOptions } />
-    );
-
-    // Setup internal pagination.
-    let start = (this.state.page - 1) * this.state.size;
-    let end = start + this.state.size;
+    const getUnlockAddressButton = () => {
+      return <ProofOfOwnershipButton lockedTitle="Unlock Address" unlockedTitle="Address Unlocked" address={this.state.carverAddress.label} payload={this.state.carverAddress.label} />
+    }
 
     return (
       <div>
-        <HorizontalRule title="Wallet Info" />
+        <HorizontalRule title="Wallet Info" selects={[getUnlockAddressButton()]} />
         <CardAddress
-          address={ this.state.address }
-          balance={ this.state.balance }
-          received={ this.state.received }
-          txs={ this.state.txs }
-          utxo={ this.state.utxo } />
-        <HorizontalRule select={ select } title="Wallet Transactions" />
-        <CardAddressTXs
-          address={ this.state.address }
-          txs={ this.state.txs.slice(start, end) }
-          utxo={ this.state.utxo } />
-        <Pagination
-          current={ this.state.page }
-          className="float-right"
-          onPage={ this.handlePage }
-          total={ this.state.pages } />
+          carverAddress={this.state.carverAddress} />
+        {this.getMasternodesAddressWidget()}
         <div className="clearfix" />
+        <AddressTxs addressId={this.state.carverAddress._id} txCount={this.state.carverAddress.countIn + this.state.carverAddress.countOut} />
+        <div className="clearfix" />
+        {this.getMasternodeDetails()}
       </div>
     );
   };
 }
 
-const mapDispatch = dispatch => ({
-  getAddress: query => Actions.getAddress(query)
+
+const mapDispatch = (dispatch, ownProps) => ({
+  getAddress: query => Actions.getAddress(query),
+  getMNs: query => {
+    query.hash = ownProps.match.params.hash; // Add current wallet address to the filtering of getMNs(). Look at server/handler/blockex.js getMasternodes()
+    return Actions.getMNs(query);
+  },
+  getMasternodesAddressWidget: query => {
+    const address = ownProps.match.params.hash;
+    const masternodesAddressWidget = configUtils.getCommunityAddressWidgetConfig(address, "masternodesAddressWidget");
+    if (!masternodesAddressWidget) {
+      return null;
+    }
+    if (masternodesAddressWidget.addresses) {
+      query.addresses = masternodesAddressWidget.addresses; // Add array of wallet addresses to the filtering of getMNs(). Look at server/handler/blockex.js getMasternodes()
+    }
+    return Actions.getMNs(query);
+  }
 });
 
 const mapState = state => ({

@@ -1,4 +1,5 @@
 
+import config from '../../config'
 import Actions from '../core/Actions';
 import blockchain from '../../lib/blockchain';
 import Component from '../core/Component';
@@ -10,11 +11,11 @@ import Icon from '../component/Icon';
 
 import CardMarket from '../component/Card/CardMarket';
 import CardMasternodeSummary from '../component/Card/CardMasternodeSummary';
-import CardPoS from '../component/Card/CardPoS';
+import CardHighlightedAddresses from '../component/Card/CardHighlightedAddresses';
+import CardBlockCountdown from '../component/Card/CardBlockCountdown';
 import CardPoSCalc from '../component/Card/CardPoSCalc';
 import CardStatus from '../component/Card/CardStatus';
 import WatchList from '../component/WatchList';
-import CardSeeSaw from '../component/Card/CardSeeSaw';
 
 class CoinSummary extends Component {
   static propTypes = {
@@ -29,15 +30,47 @@ class CoinSummary extends Component {
   render() {
     const coin = this.props.coins && this.props.coins.length
       ? this.props.coins[0]
-      : { diff: 0, netHash: 0 };
+      : { diff: 0, netHash: 0, blocks: 0 };
 
-    const height = this.props.txs.length
+    const height = this.props.txs.length && this.props.txs[0].blockHeight > coin.blocks
       ? this.props.txs[0].blockHeight
       : coin.blocks;
 
     const watchlist = height >= blockchain.params.LAST_POW_BLOCK && height >= blockchain.params.LAST_SEESAW_BLOCK
       ? this.props.searches
       : this.props.searches.slice(0, 7);
+
+    const getCardHighlightedAddresses = () => {
+      if (!config.community) {
+        return null;
+      }
+
+      const featuredAddresses = config.community.highlightedAddresses;
+      return (
+        <CardHighlightedAddresses
+          title="Community Addresses"
+          addresses={featuredAddresses}
+          onSearch={this.props.onSearch}
+        />
+      );
+    };
+
+    const getCardBlockCountdowns = (blockCountdowns) => {
+      if (!blockCountdowns) {
+        return;
+      }
+      var blockCountdownElements = [];
+      blockCountdowns.forEach((blockCountdown, index) => {
+        blockCountdownElements.push(<CardBlockCountdown
+          key={index}
+          height={height}
+          avgBlockTime={coin.avgBlockTime}
+          blockCountdown={blockCountdown} />);
+      });
+
+      return blockCountdownElements;
+    }
+
 
     return (
       <div>
@@ -46,11 +79,15 @@ class CoinSummary extends Component {
             <div className="row">
               <div className="col-md-12 col-lg-6">
                 <CardStatus
-                  avgBlockTime={ coin.avgBlockTime }
-                  avgMNTime={ coin.avgMNTime }
-                  blocks={ height }
-                  peers={ coin.peers }
-                  status={ coin.status } />
+                  avgBlockTime={coin.avgBlockTime}
+                  avgMNTime={coin.avgMNTime}
+                  blocks={height}
+                  peers={coin.peers}
+                  status={coin.status}
+                  countCarverAddresses={coin.countCarverAddresses}
+                  countCarverMovements={coin.countCarverMovements}
+                  coin={coin}
+                />
               </div>
               <div className="col-md-12 col-lg-6">
                 <CardPoSCalc />
@@ -59,33 +96,29 @@ class CoinSummary extends Component {
             <div className="row">
               <div className="col-md-12 col-lg-6">
                 <CardMarket
-                  btc={ coin.btc }
-                  usd={ coin.usd }
-                  xAxis={ this.props.coins.map(c => c.createdAt) }
-                  yAxis={ this.props.coins.map(c => c.usd ? c.usd : 0.0) } />
+                  btc={coin.btc}
+                  usd={coin.usd}
+                  xAxis={this.props.coins.map(c => c.createdAt)}
+                  yAxis={this.props.coins.map(c => c.usd ? c.usd : 0.0)} />
               </div>
               <div className="col-md-12 col-lg-6">
                 <CardMasternodeSummary
-                  offline={ coin.mnsOff }
-                  online={ coin.mnsOn }
-                  xAxis={ this.props.coins.map(c => c.createdAt) }
-                  yAxis={ this.props.coins.map(c => c.mnsOn ? c.mnsOn : 0.0) } />
+                  offline={coin.mnsOff}
+                  online={coin.mnsOn}
+                  xAxis={this.props.coins.map(c => c.createdAt)}
+                  yAxis={this.props.coins.map(c => c.mnsOn ? c.mnsOn : 0.0)} />
               </div>
             </div>
           </div>
           <div className="col-md-12 col-lg-3">
-            <CardPoS
-              average={ coin.avgBlockTime }
-              height={ height }
-              posHeight={ blockchain.params.LAST_POW_BLOCK } />
-            <CardSeeSaw
-              average={ coin.avgBlockTime }
-              height={ height }
-              ssHeight={ blockchain.params.LAST_SEESAW_BLOCK } />
+            {getCardBlockCountdowns(config.blockCountdowns)}
+
+            {getCardHighlightedAddresses()}
+
             <WatchList
-              items={ watchlist }
-              onSearch={ this.props.onSearch }
-              onRemove={ this.props.onRemove } />
+              items={watchlist}
+              onSearch={this.props.onSearch}
+              onRemove={this.props.onRemove} />
           </div>
         </div>
       </div>

@@ -25,7 +25,7 @@ server {
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
-    #server_name explorer.bulwarkcrypto.com;
+    #server_name info.absolutecoin.net;
     server_name _;
 
     gzip on;
@@ -51,21 +51,21 @@ server {
 
     #listen [::]:443 ssl ipv6only=on; # managed by Certbot
     #listen 443 ssl; # managed by Certbot
-    #ssl_certificate /etc/letsencrypt/live/explorer.bulwarkcrypto.com/fullchain.pem; # managed by Certbot
-    #ssl_certificate_key /etc/letsencrypt/live/explorer.bulwarkcrypto.com/privkey.pem; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/info.absolutecoin.net/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/info.absolutecoin.net/privkey.pem; # managed by Certbot
     #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 #server {
-#    if ($host = explorer.bulwarkcrypto.com) {
+#    if ($host = info.absolutecoin.net) {
 #        return 301 https://\$host\$request_uri;
 #    } # managed by Certbot
 #
 #	listen 80 default_server;
 #	listen [::]:80 default_server;
 #
-#	server_name explorer.bulwarkcrypto.com;
+#	server_name info.absolutecoin.net;
 #   return 404; # managed by Certbot
 #}
 EOL
@@ -83,54 +83,54 @@ installMongo () {
     sudo chown -R mongodb:mongodb /data/db
     sudo systemctl start mongod
     sudo systemctl enable mongod
-    mongo blockex --eval "db.createUser( { user: \"$rpcuser\", pwd: \"$rpcpassword\", roles: [ \"readWrite\" ] } )"
+    mongo absolutex --eval "db.createUser( { user: \"$rpcuser\", pwd: \"$rpcpassword\", roles: [ \"readWrite\" ] } )"
     clear
 }
 
-installBulwark () {
-    echo "Installing Bulwark..."
-    mkdir -p /tmp/bulwark
-    cd /tmp/bulwark
-    curl -Lo bulwark.tar.gz $bwklink
-    tar -xzf bulwark.tar.gz
-    sudo mv * /usr/local/bin
+installAbsolute () {
+    echo "Installing Absolute..."
+    mkdir -p /tmp/absolute
+    cd /tmp/absolute
+    curl -Lo absolute.tar.gz $abslink
+    tar -xzf absolute.tar.gz
+    sudo mv ./absolutecore-0.$versionsh/bin/* /usr/local/bin
     cd
-    rm -rf /tmp/bulwark
-    mkdir -p /home/explorer/.bulwark
-    cat > sudo /home/explorer/.bulwark/bulwark.conf << EOL
-rpcport=52544
+    rm -rf /tmp/absolute
+    mkdir -p /home/explorer/.absolutecore
+    cat > /home/explorer/.absolutecore/absolute.conf << EOL
+rpcport=18889
 rpcuser=$rpcuser
 rpcpassword=$rpcpassword
 daemon=1
 txindex=1
 EOL
-    sudo cat > sudo /etc/systemd/system/bulwarkd.service << EOL
+    sudo cat > /etc/systemd/system/absoluted.service << EOL
 [Unit]
-Description=bulwarkd
+Description=absoluted
 After=network.target
 [Service]
 Type=forking
 User=explorer
 WorkingDirectory=/home/explorer
-ExecStart=/usr/local/bin/bulwarkd -datadir=/home/explorer/.bulwark
-ExecStop=/usr/local/bin/bulwark-cli -datadir=/home/explorer/.bulwark stop
+ExecStart=/home/explorer/bin/absoluted -datadir=/home/explorer/.absolutecore
+ExecStop=/home/explorer/bin/absolute-cli -datadir=/home/explorer/.absolutecore stop
 Restart=on-abort
 [Install]
 WantedBy=multi-user.target
 EOL
-    sudo systemctl start bulwarkd
-    sudo systemctl enable bulwarkd
+    sudo systemctl start absoluted
+    sudo systemctl enable absoluted
     echo "Sleeping for 1 hour while node syncs blockchain..."
     sleep 1h
     clear
 }
 
-installBlockEx () {
-    echo "Installing BlockEx..."
-    git clone https://github.com/bulwark-crypto/bulwark-explorer.git /home/explorer/blockex
-    cd /home/explorer/blockex
+installAbsolutex () {
+    echo "Installing Absolutex..."
+    git clone https://github.com/absolute-community/explorer-explorer.git /home/explorer/absolutex
+    cd /home/explorer/absolutex
     yarn install
-    cat > /home/explorer/blockex/config.server.js << EOL
+    cat > /home/explorer/absolutex/config.server.js << EOL
 /**
  * Keep all your API & secrets here. DO NOT IMPORT THIS FILE IN /client folder
  */
@@ -138,14 +138,14 @@ const secretsConfig = {
   db: {
     host: '127.0.0.1',
     port: '27017',
-    name: 'blockex',
-    user: 'blockexuser',
+    name: 'absolutex',
+    user: 'absolutexuser',
     pass: 'Explorer!1'
   },
   rpc: {
     host: '127.0.0.1',
     port: '52541',
-    user: 'bulwarkrpc',
+    user: 'absoluterpc',
     pass: 'someverysafepassword',
     timeout: 8000, // 8 seconds
   },
@@ -153,7 +153,7 @@ const secretsConfig = {
 
 module.exports = { secretsConfig }; // This is returned as an object on purpose so you have to be explicit at stating that you are accessing a secrets config
 EOL
-    cat > /home/explorer/blockex/config.js << EOL
+    cat > /home/explorer/absolutex/config.js << EOL
 const { SocialType } = require('./features/social/data');
 
 /**
@@ -168,21 +168,21 @@ const { SocialType } = require('./features/social/data');
  */
 const config = {
   api: {
-    host: 'http://localhost', // ex: 'https://explorer.bulwarkcrypto.com' for nginx (SSL), 'http://IP_ADDRESS' 
+    host: 'http://localhost', // ex: 'https://info.absolutecoin.net' for nginx (SSL), 'http://IP_ADDRESS' 
     port: '3000', // ex: Port 3000 on prod and localhost
     portWorker: '3000', // ex: Port 443 for production(ngingx) if you have SSL (we use certbot), 3000 on localhost or ip
     prefix: '/api',
     timeout: '5s'
   },
   coinDetails: {
-    name: 'Bulwark',
-    shortName: 'BWK',
+    name: 'absolute',
+    shortName: 'ABS',
     displayDecimals: 2,
-    longName: 'Bulwark Cryptocurrency',
+    longName: 'Absolute Cryptocurrency',
     coinNumberFormat: '0,0.0000',
     coinTooltipNumberFormat: '0,0.0000000000', // Hovering over a number will show a larger percision tooltip
-    websiteUrl: 'https://bulwarkcrypto.com/',
-    masternodeCollateral: 5000 // MN ROI% gets based on this number. If your coin has multi-tiered masternodes then set this to lowest tier (ROI% will simply be higher for bigger tiers)
+    websiteUrl: 'https://absolutecoin.net/',
+    masternodeCollateral: 2500 // MN ROI% gets based on this number. If your coin has multi-tiered masternodes then set this to lowest tier (ROI% will simply be higher for bigger tiers)
   },
   offChainSignOn: {
     enabled: true,
@@ -212,7 +212,7 @@ const config = {
       type: SocialType.Reddit, // What type of social widget is it?
       group: 'community', // Multiple social widget feeds can be combined into a single cross-app group feed
       options: {
-        subreddit: 'MyAwesomeCoin', // BulwarkCoin as an example
+        subreddit: 'MyAwesomeCoin', // AbsoluteCoin as an example
         query: 'flair:"Community"' // Show only posts with Community flair (the little tag next to post) (You can empty this to show all posts or specify your own filter based on https://www.reddit.com/wiki/search)
       }
     }
@@ -223,7 +223,7 @@ const config = {
   },
   coinMarketCap: {
     api: 'http://api.coinmarketcap.com/v1/ticker/',
-    ticker: 'bulwark'
+    ticker: 'absolute'
   },
 
   /**
@@ -392,12 +392,12 @@ EOL
     nodejs ./cron/rich.js
     clear
     cat > mycron << EOL
-*/1 * * * * cd /home/explorer/blockex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/peer.js >> ./tmp/peer.log 2>&1
-*/1 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
-*/5 * * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
-0 0 * * * cd /home/explorer/blockex && /usr/bin/nodejs ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/peer.js >> ./tmp/peer.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
+*/5 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
+0 0 * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
 EOL
     crontab mycron
     rm -f mycron
@@ -413,28 +413,28 @@ clear
 
 # Variables
 echo "Setting up variables..."
-bwklink=`curl -s https://api.github.com/repos/bulwark-crypto/bulwark/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
+abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep x86_64-linux | cut -d '"' -f 4`
 rpcuser=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 rpcpassword=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
-echo "Repo: $bwklink"
+echo "Repo: $abslink"
 echo "PWD: $PWD"
 echo "User: $rpcuser"
 echo "Pass: $rpcpassword"
 sleep 5s
 clear
 
-# Check for blockex folder, if found then update, else install.
-if [ ! -d "/home/explorer/blockex" ]
+# Check for absolutex folder, if found then update, else install.
+if [ ! -d "/home/explorer/absolutex" ]
 then
     installNginx
     installMongo
-    #installBulwark
+    #installAbsolute
     installNodeAndYarn
-    installBlockEx
+    installAbsolutex
     echo "Finished installation!"
 else
-    cd /home/explorer/blockex
+    cd /home/explorer/absolutex
     git pull
     pm2 restart index
-    echo "BlockEx updated!"
+    echo "Absolutex updated!"
 fi

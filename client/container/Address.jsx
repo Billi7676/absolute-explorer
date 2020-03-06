@@ -132,7 +132,7 @@ class Address extends Component {
 const mapDispatch = (dispatch, ownProps) => ({
   getAddress: query => Actions.getAddress(query),
   getMNs: query => {
-    query.hash = ownProps.match.params.hash; // Add current wallet address to the filtering of getMNs(). Look at server/handler/blockex.js getMasternodes()
+    query.hash = ownProps.match.params.hash; // Add current wallet address to the filtering of getMNs(). Look at server/handler/absolutex.js getMasternodes()
     return Actions.getMNs(query);
   },
   getMasternodesAddressWidget: query => {
@@ -142,7 +142,7 @@ const mapDispatch = (dispatch, ownProps) => ({
       return null;
     }
     if (masternodesAddressWidget.addresses) {
-      query.addresses = masternodesAddressWidget.addresses; // Add array of wallet addresses to the filtering of getMNs(). Look at server/handler/blockex.js getMasternodes()
+      query.addresses = masternodesAddressWidget.addresses; // Add array of wallet addresses to the filtering of getMNs(). Look at server/handler/absolutex.js getMasternodes()
     }
     return Actions.getMNs(query);
   }

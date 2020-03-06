@@ -25,7 +25,7 @@ server {
 
     root /var/www/html;
     index index.html index.htm index.nginx-debian.html;
-    #server_name explorer.absolutecoin.net;
+    #server_name info.absolutecoin.net;
     server_name _;
 
     gzip on;
@@ -51,21 +51,21 @@ server {
 
     #listen [::]:443 ssl ipv6only=on; # managed by Certbot
     #listen 443 ssl; # managed by Certbot
-    #ssl_certificate /etc/letsencrypt/live/explorer.absolutecoin.net/fullchain.pem; # managed by Certbot
-    #ssl_certificate_key /etc/letsencrypt/live/explorer.absolutecoin.net/privkey.pem; # managed by Certbot
+    #ssl_certificate /etc/letsencrypt/live/info.absolutecoin.net/fullchain.pem; # managed by Certbot
+    #ssl_certificate_key /etc/letsencrypt/live/info.absolutecoin.net/privkey.pem; # managed by Certbot
     #include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
     #ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
 }
 
 #server {
-#    if ($host = explorer.absolutecoin.net) {
+#    if ($host = info.absolutecoin.net) {
 #        return 301 https://\$host\$request_uri;
 #    } # managed by Certbot
 #
 #	listen 80 default_server;
 #	listen [::]:80 default_server;
 #
-#	server_name explorer.absolutecoin.net;
+#	server_name info.absolutecoin.net;
 #   return 404; # managed by Certbot
 #}
 EOL

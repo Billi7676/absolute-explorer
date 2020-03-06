@@ -5,10 +5,46 @@ Absolute Explorer
 [![GitHub license](https://img.shields.io/github/license/bulwark-crypto/bulwark-explorer.svg)](https://github.com/bulwark-crypto/bulwark-explorer/blob/master/COPYING) [![Build Status](https://travis-ci.org/bulwark-crypto/bulwark-explorer.svg?branch=master)](https://travis-ci.org/absolute-community/bulwark-explorer) [![Discord](https://img.shields.io/discord/374271866308919296.svg)](https://discord.me/FhtgzY8) [![GitHub version](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer.svg)](https://badge.fury.io/gh/bulwark-crypto%2Fbulwark-explorer)
 =====
 
-Simple cryptocurrency block explorer system.
+The most advanced blockchain eplorer for masternode, proof-of-stake and proof-of-work chains.
+
+Features:
+
+- World's most advanced Proof Of Stake calculator based on real blockchain rewards data
+- Per-block POS, POW, MN rewards breakdown
+- Detailed per-address rewards breakdown and rewards summary
+- Automatic chain rewinding
+- Graceful error recovery (Unreconciliation)
+
+# Easy Installation Instructions
+
+1. SSH into a clean UBUNTU 18.04 VPS with root access
+2. `apt-get install git`
+3. `adduser explorer`
+4. `usermod -aG sudo explorer`
+5. Ensure your coin RPC is running
+6. `su explorer`
+7. `bash <( curl https://raw.githubusercontent.com/absolute-community/absolute-explorer/master/script/install.sh )`
+
+## Post-Installation
+
+Check block syncing status with `tail -f /home/explorer/blockex/tmp/block.log`
+
+You will most likely see `Error: connect ECONNREFUSED` this is because your RPC username/password/port do not match your coin. Please check your coin `.config` file (ex: `/home/explorer/.absolutecore/absolute.conf`)
+
+You will see something like this:
+```
+rpcport=52541
+rpcuser=someuserhere
+rpcpassword=somepasswordhere
+daemon=1
+txindex=1
+```
+Please ensure your `/home/explorer/absoluteex/config.js` matches the rpc information of your coin.
+
+# Advanced Installation Instructions
 
 ## Required
-This repo assumes `git`, `mongodb`, `node`, `yarn`, and are installed with configuration done.  Please adjust commands to your local environment. 
+This repo assumes `git`, `mongodb`, `node`, `yarn`, and are installed with configuration done.  Please adjust commands to your local environment.
 
 Download links:
 
@@ -18,15 +54,13 @@ https://nodejs.org/en/download/package-manager/
 
 https://yarnpkg.com/lang/en/docs/install/
 
-It is also required to have the Bulwark daemon running in the background. It is recommended to set this up before beginning to set up the explorer so that it syncs by the time you need it.
+It is also required to have the Absolute daemon running in the background. It is recommended to set this up before beginning to set up the explorer so that it syncs by the time you need it.
 
-Our geniuses here at BulwarkCorp™ have put together a script to do this for you. Just run
+Our geniuses here at Absolute have put together a script to Install Absolute daemon. Just run `bash script/absoluted_setup.sh`
 
-`bash script/absoluted_setup.sh`
+This will install the latest Absolute wallet and create a rpc username/password before starting the daemon.
 
-This will install the latest Bulwark wallet and create a rpc username/password before starting the daemon.
-
-## Install
+## Manual Install
 `git clone https://github.com/absolute-community/absolute-explorer.git` - copy repo to local folder.
 
 `cd absolutex` - change into project directory.
@@ -75,7 +109,11 @@ To setup the crontab please see run `crontab -e` to edit the crontab and paste t
 */1 * * * * cd /path/to/absolutex && /path/to/node ./cron/peer.js >> ./tmp/peer.log 2>&1
 */1 * * * * cd /path/to/absolutex && /path/to/node ./cron/rich.js >> ./tmp/rich.log 2>&1
 */5 * * * * cd /path/to/absolutex && /path/to/node ./cron/coin.js >> ./tmp/coin.log 2>&1
+0 0 * * * cd /path/to/absolutex && /path/to/node ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
 ```
+For crontab config:
+- `/path/to/absolutex` example is `/home/explorer/absolutex`
+- `/path/to/node` example is `/usr/bin/nodejs`
 
 ## Build
 At this time only the client web interface needs to be built using webpack and this can be done by running `yarn run build:web`.  This will bundle the application and put it in the `/public` folder for delivery.

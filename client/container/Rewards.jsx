@@ -9,6 +9,8 @@ import CardRewards from '../component/Card/CardRewards';
 import HorizontalRule from '../component/HorizontalRule';
 import Pagination from '../component/Pagination';
 import Select from '../component/Select';
+import ChartComponent from '../component/ChartComponent'
+import { TimeIntervalType } from '../../lib/timeInterval'
 
 import { PAGINATION_PAGE_SIZE } from '../constants';
 
@@ -42,7 +44,10 @@ class Rewards extends Component {
         })
         .catch(error => this.setState({ error, loading: false }));
     }, 800);
+
   };
+
+
 
   componentDidMount() {
     this.getRewards();
@@ -79,11 +84,25 @@ class Rewards extends Component {
         options={selectOptions} />
     );
 
+
     return (
       <div>
+        <div className="row">
+          <div className="col-md-12 col-lg-6">
+            <HorizontalRule
+              title="Average POS Input Size" />
+            <ChartComponent type={TimeIntervalType.DailyAvgPosInputValue} />
+          </div>
+          <div className="col-md-12 col-lg-6">
+            <HorizontalRule
+              title="Average Daily POS ROI%" />
+            <ChartComponent type={TimeIntervalType.DailyAvgPosRoi} />
+          </div>
+        </div>
+
         <HorizontalRule
           select={select}
-          title="Rewards" />
+          title="Proof Of Stake Rewards" />
         <CardRewards rewards={this.state.rewards} addBadgeClassToValue={false} />
         <Pagination
           current={this.state.page}

@@ -91,9 +91,9 @@ installAbsolute () {
     echo "Installing Absolute..."
     mkdir -p /tmp/absolute
     cd /tmp/absolute
-    curl -Lo absolute.tar.gz $abslink
-    tar -xzf absolute.tar.gz
-    sudo mv ./absolutecore-0.$versionsh/bin/* /usr/local/bin
+    wget https://github.com/absolute-community/absolute/releases/download/v12.2.5/absolutecore-0.12.2.5-x86_64-linux-gnu.tar.gz -O absolutecore-0.12.2.5-x86_64-linux-gnu.tar.gz -q
+    tar -xzf absolutecore-0.12.2.5-x86_64-linux-gnu.tar.gz
+    sudo mv ./absolutecore-0.12.2.5/bin/* /usr/local/bin
     cd
     rm -rf /tmp/absolute
     mkdir -p /home/explorer/.absolutecore
@@ -426,7 +426,6 @@ clear
 
 # Variables
 echo "Setting up variables..."
-abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep x86_64-linux | cut -d '"' -f 4`
 rpcuser=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 13 ; echo '')
 rpcpassword=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 echo "Repo: $abslink"

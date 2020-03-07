@@ -22,7 +22,7 @@ ext_ip=""
 p_version=""
 
 clear
-printf  "\n\n******* Starting Absolute-Community Masternode installation *******\n\n"
+printf  "\n\n******* Starting Absolute Installation *******\n\n"
 printf " working directory is $(pwd)\n"
 {
 echo "Step 1 : Updating packages"

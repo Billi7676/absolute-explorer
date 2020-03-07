@@ -96,8 +96,8 @@ installAbsolute () {
     sudo mv ./absolutecore-0.12.2.5/bin/* /usr/local/bin
     cd
     rm -rf /tmp/absolute
-    mkdir -p /home/explorer/.absolutecore
-    cat > /home/explorer/.absolutecore/absolute.conf << EOL
+    mkdir -p /root/.absolutecore
+    cat > /root/.absolutecore/absolute.conf << EOL
 rpcport=18889
 rpcuser=$rpcuser
 rpcpassword=$rpcpassword

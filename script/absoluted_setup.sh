@@ -1,9 +1,9 @@
 #!/bin/bash
 # Download latest node and install.
-bwklink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
+abslink=`curl -s https://api.github.com/repos/absolute-community/absolute/releases/latest | grep browser_download_url | grep linux64 | cut -d '"' -f 4`
 mkdir -p /tmp/absolute
 cd /tmp/absolute
-curl -Lo absolute.tar.gz $bwklink
+curl -Lo absolute.tar.gz $abslink
 tar -xzf absolute.tar.gz
 sudo mv ./bin/* /usr/local/bin
 cd

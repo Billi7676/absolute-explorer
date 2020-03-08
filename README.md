@@ -104,12 +104,12 @@ __Note:__ is is recommended to run all the crons before editing the crontab to h
 
 To setup the crontab please see run `crontab -e` to edit the crontab and paste the following lines (edit with your local information):
 ```
-*/1 * * * * cd /path/to/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
-*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/masternode.js >> ./tmp/masternode.log 2>&1
-*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/peer.js >> ./tmp/peer.log 2>&1
-*/1 * * * * cd /path/to/absolutex && /path/to/node ./cron/rich.js >> ./tmp/rich.log 2>&1
-*/5 * * * * cd /path/to/absolutex && /path/to/node ./cron/coin.js >> ./tmp/coin.log 2>&1
-0 0 * * * cd /path/to/absolutex && /path/to/node ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/peer.js >> ./tmp/peer.log 2>&1
+*/1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/rich.js >> ./tmp/rich.log 2>&1
+*/5 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/coin.js >> ./tmp/coin.log 2>&1
+0 0 * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/timeIntervals.js >> ./tmp/timeIntervals.log 2>&1
 ```
 For crontab config:
 - `/path/to/absolutex` example is `/home/explorer/absolutex`

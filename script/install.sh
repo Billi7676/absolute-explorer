@@ -127,7 +127,7 @@ EOL
 
 installAbsolutex () {
     echo "Installing Absolutex..."
-    git clone https://github.com/absolute-community/explorer-absolute.git /home/explorer/absolutex
+    git clone https://github.com/absolute-community/absolute-explorer.git /home/explorer/absolutex
     cd /home/explorer/absolutex
     yarn install
     cat > /home/explorer/absolutex/config.server.js << EOL

@@ -3,7 +3,7 @@
 installNodeAndYarn () {
     echo "Installing nodejs and yarn..."
     sudo curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
-    sudo apt-get install -y nodejs npm
+    sudo apt install nodejs 
     sudo curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     sudo echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     sudo apt-get update -y
@@ -11,7 +11,7 @@ installNodeAndYarn () {
     sudo npm install -g pm2
     sudo ln -s /usr/bin/nodejs /usr/bin/node
     sudo chown -R explorer:explorer /home/explorer/.config
-    clear
+    #clear
 }
 
 installNginx () {
@@ -71,7 +71,7 @@ server {
 EOL
     sudo systemctl start nginx
     sudo systemctl enable nginx
-    clear
+    #clear
 }
 
 installMongo () {
@@ -84,7 +84,7 @@ installMongo () {
     sudo systemctl start mongod
     sudo systemctl enable mongod
     mongo absolutex --eval "db.createUser( { user: \"$rpcuser\", pwd: \"$rpcpassword\", roles: [ \"readWrite\" ] } )"
-    clear
+    #clear
 }
 
 installAbsolute () {
@@ -122,7 +122,7 @@ EOL
     sudo systemctl enable absoluted
     echo "Sleeping for 1 hour while node syncs blockchain..."
     sleep 1h
-    clear
+    #clear
 }
 
 installAbsolutex () {
@@ -390,7 +390,7 @@ EOL
     nodejs ./cron/masternode.js
     nodejs ./cron/peer.js
     nodejs ./cron/rich.js
-    clear
+    #clear
     cat > mycron << EOL
 */1 * * * * cd /home/explorer/absolutex && ./script/cron_block.sh >> ./tmp/block.log 2>&1
 */1 * * * * cd /home/explorer/absolutex && /usr/bin/nodejs ./cron/masternode.js >> ./tmp/masternode.log 2>&1
@@ -422,7 +422,7 @@ sudo apt-get install libzmq3-dev -y -qq
 sudo apt-get install libminiupnpc-dev -y -qq
 sudo apt install virtualenv -y -qq
 sudo apt-get install -y apt-transport-https build-essential cron curl gcc git g++ make sudo vim wget
-clear
+#clear
 
 # Variables
 echo "Setting up variables..."
@@ -433,7 +433,7 @@ echo "PWD: $PWD"
 echo "User: $rpcuser"
 echo "Pass: $rpcpassword"
 sleep 5s
-clear
+#clear
 
 # Check for absolutex folder, if found then update, else install.
 if [ ! -d "/home/explorer/absolutex" ]

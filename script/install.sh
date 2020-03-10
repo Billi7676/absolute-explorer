@@ -416,7 +416,7 @@ sudo apt-get install nano htop -y -qq
 sudo apt-get install pwgen  -y -qq
 sudo apt-get install libdb4.8-dev libdb4.8++-dev -y -qq
 sudo apt-get install tmux  -y -qq
-sudo apt-get install libevent-pthreads-2.0-5 -y -qq
+sudo apt-get install libevent-pthreads-2.1-6 -y -qq
 sudo apt-get install libboost-all-dev -y -qq
 sudo apt-get install libzmq3-dev -y -qq
 sudo apt-get install libminiupnpc-dev -y -qq
